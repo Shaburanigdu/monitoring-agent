@@ -1,0 +1,22 @@
+# Build output
+build/
+out/
+cmake-build-*/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.vcxproj.user
+
+# VS Code 
+.vscode/*
+!.vscode/settings.json
+
+# Runtime artifacts
+backup.json
+*.log
+
+# OS
+Thumbs.db
+.DS_Store
