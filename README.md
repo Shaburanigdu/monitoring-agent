@@ -23,22 +23,33 @@
 - CMake 3.16+
 - [nlohmann/json](https://github.com/nlohmann/json) — сериализация JSON
 - [cpp-httplib](https://github.com/yhirose/cpp-httplib) — HTTP-клиент
-- Win32 API (`GetForegroundWindow`, `GetLastInputInfo`) — сбор метрик под Windows
+- Win32 API (`GetForegroundWindow`, `GetLastInputInfo`, `QueryFullProcessImageNameW`) — сбор метрик
 
 Обе библиотеки подтягиваются автоматически через `FetchContent` при первой сборке
 (нужен доступ в интернет).
 
-## Требования
+## Требования и платформа
 
+**Поддерживаемая платформа: Windows 10/11.**
+
+Агент использует Win32 API (`GetForegroundWindow`, `GetLastInputInfo`,
+`QueryFullProcessImageNameW`) для сбора метрик и реализован только под Windows.
+
+Каркас приложения (потоки, очередь, сеть, graceful shutdown) написан
+кроссплатформенно, но сбор метрик под Linux (X11/Wayland) не реализован
+в рамках прототипа. В `main.cpp` для не-Windows платформ используется
+заглушка `collect_metrics_stub()`, возвращающая пустые метрики.
+
+Требования:
 - Windows 10/11
-- Visual Studio 2019/2022 (MSVC) с компонентом **Desktop development with C++**
+- Visual Studio 2019/2022 (MSVC) с workload «Desktop development with C++»
 - CMake 3.16+
-- Python 3.8+ — только для запуска демо-сервера
+- Python 3.8+ (только для демо-сервера)
 
 ## Сборка
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Shaburanigdu/monitoring-agent.git
 cd monitoring-agent
 cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 cmake --build build --config Release
@@ -126,8 +137,5 @@ POST на `http://127.0.0.1:8080/`, заголовок `Content-Type: applicatio
 
 ## Ограничения прототипа
 
-- Сбор метрик реализован только под Windows. Для Linux есть заглушка
-  `collect_metrics_stub()` — расширяется под X11 (`XGetInputFocus`,
-  `XQueryTree`, `XFetchName`).
 - Кейлоггер не пишется — фиксируется только факт ввода через `GetLastInputInfo`.
 - HTTPS не используется (демо-сервер работает по HTTP).
