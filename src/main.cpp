@@ -294,8 +294,6 @@ private:
                     queue_.push_all_front(batch);
                 }
             } 
-            // Вывод в консоль при удачном подключении
-            /*
             else {
                 std::cout << "[sender] FAILED: "
                           << httplib::to_string(res.error())
@@ -304,8 +302,7 @@ private:
                 for (int i = 0; i < 50 && running_ && !g_stop; ++i) {
                     std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 }
-            }
-            */
+            }        
         }
     }
 
